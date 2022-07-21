@@ -1,0 +1,1174 @@
+{
+  "meta": {
+    "creator": "cds-dk 4.8.2"
+  },
+  "$version": "2.0",
+  "definitions": {
+    "RMTSAMPLEFLIGHT": {
+      "kind": "service",
+      "@cds.external": true,
+      "@m.IsDefaultEntityContainer": "true",
+      "@sap.supported.formats": "atom json xlsx"
+    },
+    "RMTSAMPLEFLIGHT.FlightDetails": {
+      "kind": "type",
+      "elements": {
+        "countryFrom": {
+          "type": "cds.String",
+          "length": 3,
+          "@sap.label": "Country"
+        },
+        "cityFrom": {
+          "type": "cds.String",
+          "length": 20,
+          "@sap.label": "Depart.city"
+        },
+        "airportFrom": {
+          "type": "cds.String",
+          "length": 3,
+          "@sap.label": "Dep. airport"
+        },
+        "countryTo": {
+          "type": "cds.String",
+          "length": 3,
+          "@sap.label": "Country"
+        },
+        "cityTo": {
+          "type": "cds.String",
+          "length": 20,
+          "@sap.label": "Arrival city"
+        },
+        "airportTo": {
+          "type": "cds.String",
+          "length": 3,
+          "@sap.label": "Dest. airport"
+        },
+        "flightTime": {
+          "type": "cds.Integer",
+          "@sap.label": "Flight time"
+        },
+        "departureTime": {
+          "type": "cds.Time",
+          "@sap.label": "Departure"
+        },
+        "arrivalTime": {
+          "type": "cds.Time",
+          "@sap.label": "Arrival Time"
+        },
+        "distance": {
+          "type": "cds.Decimal",
+          "precision": 9,
+          "scale": 4,
+          "@sap.unit": "distanceUnit",
+          "@sap.label": "Distance"
+        },
+        "distanceUnit": {
+          "type": "cds.String",
+          "length": 3,
+          "@sap.label": "Distance in",
+          "@sap.semantics": "unit-of-measure"
+        },
+        "flightType": {
+          "type": "cds.String",
+          "length": 1,
+          "@sap.label": "Charter"
+        },
+        "period": {
+          "type": "cds.Integer",
+          "@sap.label": "n day(s) later"
+        }
+      }
+    },
+    "RMTSAMPLEFLIGHT.FlightAvailability": {
+      "kind": "type",
+      "elements": {
+        "ECONOMAX": {
+          "type": "cds.Integer",
+          "@sap.label": "Max. capacity econ."
+        },
+        "ECONOFREE": {
+          "type": "cds.Integer",
+          "@sap.label": "Free seats"
+        },
+        "BUSINMAX": {
+          "type": "cds.Integer",
+          "@sap.label": "Max. capacity bus."
+        },
+        "BUSINFREE": {
+          "type": "cds.Integer",
+          "@sap.label": "Free seats"
+        },
+        "FIRSTMAX": {
+          "type": "cds.Integer",
+          "@sap.label": "Max. capacity 1st"
+        },
+        "FIRSTFREE": {
+          "type": "cds.Integer",
+          "@sap.label": "Free seats"
+        }
+      }
+    },
+    "RMTSAMPLEFLIGHT.FlightAvailability2": {
+      "kind": "type",
+      "elements": {},
+      "includes": [
+        "RMTSAMPLEFLIGHT.FlightAvailability"
+      ]
+    },
+    "RMTSAMPLEFLIGHT.GetAvailableFlights": {
+      "kind": "function",
+      "params": {
+        "fromdate": {
+          "type": "cds.DateTime",
+          "@odata.type": "Edm.DateTime",
+          "@odata.precision": 0
+        },
+        "todate": {
+          "type": "cds.DateTime",
+          "@odata.type": "Edm.DateTime",
+          "@odata.precision": 0
+        },
+        "cityfrom": {
+          "type": "cds.String",
+          "length": 20
+        },
+        "cityto": {
+          "type": "cds.String",
+          "length": 20
+        }
+      },
+      "returns": {
+        "items": {
+          "type": "RMTSAMPLEFLIGHT.FlightCollection"
+        }
+      }
+    },
+    "RMTSAMPLEFLIGHT.SubscriptionCollection": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.content.version": "1",
+      "@sap.semantics": "subscriptions",
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 32,
+          "@sap.label": "Sub. ID",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false",
+          "@sap.filterable": "false"
+        },
+        "user": {
+          "type": "cds.String",
+          "length": 12,
+          "@m.FC_TargetPath": "SyndicationAuthorName",
+          "@m.FC_KeepInContent": "false",
+          "@sap.label": "User Name",
+          "@sap.creatable": "false",
+          "@sap.filterable": "false"
+        },
+        "updated": {
+          "type": "cds.DateTime",
+          "@odata.type": "Edm.DateTime",
+          "@odata.precision": 0,
+          "@m.FC_TargetPath": "SyndicationUpdated",
+          "@m.FC_KeepInContent": "false",
+          "@sap.label": "Time Stamp",
+          "@sap.creatable": "false",
+          "@sap.filterable": "false"
+        },
+        "title": {
+          "type": "cds.String",
+          "length": 255,
+          "@m.FC_TargetPath": "SyndicationTitle",
+          "@m.FC_KeepInContent": "false",
+          "@sap.label": "Title",
+          "@sap.filterable": "false"
+        },
+        "deliveryAddress": {
+          "type": "cds.LargeString",
+          "@sap.label": "Delivery Address",
+          "@sap.filterable": "false"
+        },
+        "persistNotifications": {
+          "type": "cds.Boolean",
+          "@sap.label": "Persist Notification",
+          "@sap.filterable": "false"
+        },
+        "collection": {
+          "type": "cds.String",
+          "length": 40,
+          "@sap.label": "Collection",
+          "@sap.filterable": "false"
+        },
+        "filter": {
+          "type": "cds.LargeString",
+          "@sap.label": "Filter",
+          "@sap.filterable": "false"
+        },
+        "select": {
+          "type": "cds.String",
+          "length": 255,
+          "@sap.label": "Select",
+          "@sap.filterable": "false"
+        },
+        "changeType": {
+          "type": "cds.String",
+          "length": 30,
+          "@sap.label": "Change Type"
+        }
+      }
+    },
+    "RMTSAMPLEFLIGHT.NotificationCollection": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.creatable": "false",
+      "@sap.updatable": "false",
+      "@sap.deletable": "false",
+      "@sap.addressable": "false",
+      "@sap.content.version": "1",
+      "@sap.semantics": "notifications",
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.String",
+          "length": 32,
+          "@sap.label": "Notification ID"
+        },
+        "collection": {
+          "type": "cds.String",
+          "length": 40,
+          "@sap.label": "Collection"
+        },
+        "title": {
+          "type": "cds.LargeString",
+          "@m.FC_TargetPath": "SyndicationTitle",
+          "@m.FC_KeepInContent": "false",
+          "@sap.label": "Notif. Text"
+        },
+        "updated": {
+          "type": "cds.DateTime",
+          "@odata.type": "Edm.DateTime",
+          "@odata.precision": 0,
+          "@m.FC_TargetPath": "SyndicationUpdated",
+          "@m.FC_KeepInContent": "false",
+          "@sap.label": "Time Stamp"
+        },
+        "changeType": {
+          "type": "cds.String",
+          "length": 30,
+          "@sap.label": "Change Type"
+        },
+        "entriesOfInterest": {
+          "type": "cds.Integer",
+          "@sap.label": "No. of Entries"
+        },
+        "recipient": {
+          "type": "cds.String",
+          "length": 112,
+          "@sap.label": "Recipient",
+          "@sap.creatable": "false",
+          "@sap.updatable": "false"
+        }
+      }
+    },
+    "RMTSAMPLEFLIGHT.FlightCollection": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.content.version": "1",
+      "elements": {
+        "carrid": {
+          "key": true,
+          "type": "cds.String",
+          "length": 3,
+          "@sap.label": "Airline"
+        },
+        "connid": {
+          "key": true,
+          "type": "cds.String",
+          "length": 4,
+          "@sap.label": "Flight Number"
+        },
+        "fldate": {
+          "key": true,
+          "type": "cds.DateTime",
+          "@odata.type": "Edm.DateTime",
+          "@odata.precision": 0,
+          "@sap.label": "Date"
+        },
+        "flightDetails": {
+          "type": "RMTSAMPLEFLIGHT.FlightDetails"
+        },
+        "PRICE": {
+          "type": "cds.Decimal",
+          "precision": 15,
+          "scale": 2,
+          "@sap.unit": "CURRENCY",
+          "@sap.label": "Airfare"
+        },
+        "CURRENCY": {
+          "type": "cds.String",
+          "length": 5,
+          "@sap.label": "Airline Currency",
+          "@sap.sortable": "false",
+          "@sap.semantics": "currency-code"
+        },
+        "PLANETYPE": {
+          "type": "cds.String",
+          "length": 10,
+          "@sap.label": "Type of the plane"
+        },
+        "SEATSMAX": {
+          "type": "cds.Integer",
+          "@sap.label": "Max. capacity econ."
+        },
+        "SEATSOCC": {
+          "type": "cds.Integer",
+          "@sap.label": "Occupied econ."
+        },
+        "PAYMENTSUM": {
+          "type": "cds.Decimal",
+          "precision": 17,
+          "scale": 2,
+          "@sap.label": "Total"
+        },
+        "SEATSMAX_B": {
+          "type": "cds.Integer",
+          "@sap.label": "Max. capacity bus."
+        },
+        "SEATSOCC_B": {
+          "type": "cds.Integer",
+          "@sap.label": "Occupied bus."
+        },
+        "SEATSMAX_F": {
+          "type": "cds.Integer",
+          "@sap.label": "Max. capacity 1st"
+        },
+        "SEATSOCC_F": {
+          "type": "cds.Integer",
+          "@sap.label": "Occupied 1st"
+        },
+        "flightbooking": {
+          "@cds.ambiguous": "missing on condition?",
+          "type": "cds.Association",
+          "target": "RMTSAMPLEFLIGHT.BookingCollection",
+          "on": [
+            {
+              "ref": [
+                "flightbooking",
+                "fldate"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "fldate"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "flightbooking",
+                "connid"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "connid"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "flightbooking",
+                "carrid"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "carrid"
+              ]
+            }
+          ]
+        },
+        "flightBookings": {
+          "@cds.ambiguous": "missing on condition?",
+          "type": "cds.Association",
+          "target": "RMTSAMPLEFLIGHT.BookingCollection",
+          "cardinality": {
+            "max": "*"
+          },
+          "on": [
+            {
+              "ref": [
+                "flightBookings",
+                "fldate"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "fldate"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "flightBookings",
+                "connid"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "connid"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "flightBookings",
+                "carrid"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "carrid"
+              ]
+            }
+          ]
+        },
+        "FlightCarrier": {
+          "@cds.ambiguous": "missing on condition?",
+          "type": "cds.Association",
+          "target": "RMTSAMPLEFLIGHT.CarrierCollection",
+          "keys": []
+        },
+        "FlightCarrier_FW": {
+          "@cds.ambiguous": "missing on condition?",
+          "type": "cds.Association",
+          "target": "RMTSAMPLEFLIGHT.CarrierCollection",
+          "keys": []
+        }
+      },
+      "actions": {
+        "CheckFlightAvailability": {
+          "kind": "function",
+          "params": {
+            "connectionid": {
+              "type": "cds.String",
+              "length": 4
+            },
+            "flightdate": {
+              "type": "cds.DateTime",
+              "@odata.type": "Edm.DateTime",
+              "@odata.precision": 0
+            }
+          },
+          "returns": {
+            "type": "RMTSAMPLEFLIGHT.FlightAvailability"
+          }
+        },
+        "GetFlightDetails": {
+          "kind": "function",
+          "params": {
+            "connectionid": {
+              "type": "cds.String",
+              "length": 4
+            }
+          },
+          "returns": {
+            "type": "RMTSAMPLEFLIGHT.FlightDetails"
+          }
+        }
+      }
+    },
+    "RMTSAMPLEFLIGHT.FlightCollection_DQ": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.content.version": "1",
+      "elements": {
+        "carrid": {
+          "key": true,
+          "type": "cds.String",
+          "length": 3,
+          "@sap.label": "Airline"
+        },
+        "connid": {
+          "key": true,
+          "type": "cds.String",
+          "length": 4,
+          "@sap.label": "Flight Number"
+        },
+        "fldate": {
+          "key": true,
+          "type": "cds.DateTime",
+          "@odata.type": "Edm.DateTime",
+          "@odata.precision": 0,
+          "@sap.label": "Date"
+        },
+        "PRICE": {
+          "type": "cds.Decimal",
+          "precision": 15,
+          "scale": 2,
+          "@sap.unit": "CURRENCY",
+          "@sap.label": "Airfare"
+        },
+        "CURRENCY": {
+          "type": "cds.String",
+          "length": 5,
+          "@sap.label": "Airline Currency",
+          "@sap.sortable": "false",
+          "@sap.semantics": "currency-code"
+        },
+        "PLANETYPE": {
+          "type": "cds.String",
+          "length": 10,
+          "@sap.label": "Type of the plane"
+        },
+        "SEATSMAX": {
+          "type": "cds.Integer",
+          "@sap.label": "Max. capacity econ."
+        },
+        "SEATSOCC": {
+          "type": "cds.Integer",
+          "@sap.label": "Occupied econ."
+        },
+        "PAYMENTSUM": {
+          "type": "cds.Decimal",
+          "precision": 17,
+          "scale": 2,
+          "@sap.label": "Total"
+        },
+        "SEATSMAX_B": {
+          "type": "cds.Integer",
+          "@sap.label": "Max. capacity bus."
+        },
+        "SEATSOCC_B": {
+          "type": "cds.Integer",
+          "@sap.label": "Occupied bus."
+        },
+        "SEATSMAX_F": {
+          "type": "cds.Integer",
+          "@sap.label": "Max. capacity 1st"
+        },
+        "SEATSOCC_F": {
+          "type": "cds.Integer",
+          "@sap.label": "Occupied 1st"
+        }
+      }
+    },
+    "RMTSAMPLEFLIGHT.BookingCollection": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.pageable": "false",
+      "@sap.content.version": "1",
+      "@sap.label": "Flight Booking",
+      "@sap.semantics": "FLIGHT_BOOKING",
+      "elements": {
+        "carrid": {
+          "key": true,
+          "type": "cds.String",
+          "length": 3,
+          "@sap.label": "Airline"
+        },
+        "connid": {
+          "key": true,
+          "type": "cds.String",
+          "length": 4,
+          "@sap.label": "Flight Number"
+        },
+        "fldate": {
+          "key": true,
+          "type": "cds.DateTime",
+          "@odata.type": "Edm.DateTime",
+          "@odata.precision": 0,
+          "@sap.label": "Date"
+        },
+        "bookid": {
+          "key": true,
+          "type": "cds.String",
+          "length": 8,
+          "@sap.label": "Booking number"
+        },
+        "CUSTOMID": {
+          "type": "cds.String",
+          "length": 8,
+          "@sap.label": "Customer Number"
+        },
+        "CUSTTYPE": {
+          "type": "cds.String",
+          "length": 1,
+          "@sap.label": "B/P customer"
+        },
+        "SMOKER": {
+          "type": "cds.String",
+          "length": 1,
+          "@sap.label": "Smoker",
+          "@sap.value.list": "standard"
+        },
+        "WUNIT": {
+          "type": "cds.String",
+          "length": 3,
+          "@sap.label": "Unit of measure",
+          "@sap.semantics": "unit-of-measure"
+        },
+        "LUGGWEIGHT": {
+          "type": "cds.String",
+          "length": 9,
+          "@sap.unit": "WUNIT",
+          "@sap.label": "Luggage Weight",
+          "@sap.value.list": "fixed-values"
+        },
+        "INVOICE": {
+          "type": "cds.String",
+          "length": 1,
+          "@sap.label": "Invoice pty."
+        },
+        "CLASS": {
+          "type": "cds.String",
+          "length": 1,
+          "@sap.label": "Class"
+        },
+        "FORCURAM": {
+          "type": "cds.Decimal",
+          "precision": 15,
+          "scale": 14,
+          "@sap.unit": "FORCURKEY",
+          "@sap.label": "Amount"
+        },
+        "FORCURKEY": {
+          "type": "cds.String",
+          "length": 5,
+          "@sap.label": "Paymnt currency",
+          "@sap.semantics": "currency-code"
+        },
+        "LOCCURAM": {
+          "type": "cds.Decimal",
+          "precision": 15,
+          "scale": 14,
+          "@sap.unit": "LOCCURKEY",
+          "@sap.label": "Amount"
+        },
+        "LOCCURKEY": {
+          "type": "cds.String",
+          "length": 5,
+          "@sap.label": "Airline Currency",
+          "@sap.semantics": "currency-code"
+        },
+        "ORDER_DATE": {
+          "type": "cds.DateTime",
+          "@odata.type": "Edm.DateTime",
+          "@odata.precision": 0,
+          "@sap.label": "Booking date",
+          "@sap.updatable": "false"
+        },
+        "COUNTER": {
+          "type": "cds.String",
+          "length": 8,
+          "@sap.label": "Sales office",
+          "@sap.updatable": "false"
+        },
+        "AGENCYNUM": {
+          "type": "cds.String",
+          "length": 8,
+          "@sap.label": "Agency No.",
+          "@sap.updatable": "false"
+        },
+        "CANCELLED": {
+          "type": "cds.String",
+          "length": 1,
+          "@sap.label": "Cancelation flag",
+          "@sap.updatable": "false"
+        },
+        "RESERVED": {
+          "type": "cds.String",
+          "length": 1,
+          "@sap.label": "Reserved",
+          "@sap.updatable": "false"
+        },
+        "PASSNAME": {
+          "type": "cds.String",
+          "length": 25,
+          "@sap.label": "Passenger Name"
+        },
+        "PASSFORM": {
+          "type": "cds.String",
+          "length": 15,
+          "@sap.label": "Title"
+        },
+        "PASSBIRTH": {
+          "type": "cds.DateTime",
+          "@odata.type": "Edm.DateTime",
+          "@odata.precision": 0,
+          "@sap.label": "DOB of Passeng."
+        },
+        "bookedFlight": {
+          "@sap.label": "Flight bookings",
+          "@cds.ambiguous": "missing on condition?",
+          "type": "cds.Association",
+          "target": "RMTSAMPLEFLIGHT.FlightCollection",
+          "on": [
+            {
+              "ref": [
+                "bookedFlight",
+                "fldate"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "fldate"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "bookedFlight",
+                "connid"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "connid"
+              ]
+            },
+            "and",
+            {
+              "ref": [
+                "bookedFlight",
+                "carrid"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "carrid"
+              ]
+            }
+          ]
+        },
+        "bookedCarrier": {
+          "@sap.label": "Type of the plane",
+          "@cds.ambiguous": "missing on condition?",
+          "type": "cds.Association",
+          "target": "RMTSAMPLEFLIGHT.CarrierCollection",
+          "on": [
+            {
+              "ref": [
+                "bookedCarrier",
+                "carrid"
+              ]
+            },
+            "=",
+            {
+              "ref": [
+                "carrid"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "RMTSAMPLEFLIGHT.CarrierCollection": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.creatable": "false",
+      "@sap.deletable": "false",
+      "@sap.content.version": "1",
+      "@m.HasStream": "true",
+      "elements": {
+        "carrid": {
+          "key": true,
+          "type": "cds.String",
+          "length": 3,
+          "@sap.label": "Airline"
+        },
+        "CARRNAME": {
+          "type": "cds.String",
+          "length": 20,
+          "@sap.label": "Airline"
+        },
+        "CURRCODE": {
+          "type": "cds.String",
+          "length": 5,
+          "@sap.label": "Airline Currency",
+          "@sap.semantics": "currency-code"
+        },
+        "URL": {
+          "type": "cds.String",
+          "length": 255,
+          "@sap.label": "URL",
+          "@sap.semantics": "url"
+        },
+        "mimeType": {
+          "type": "cds.String",
+          "length": 128,
+          "@sap.label": "MIME Type",
+          "@sap.filterable": "false"
+        },
+        "carrierFlights": {
+          "@cds.ambiguous": "missing on condition?",
+          "type": "cds.Association",
+          "target": "RMTSAMPLEFLIGHT.FlightCollection",
+          "cardinality": {
+            "max": "*"
+          },
+          "keys": []
+        },
+        "carrierFlights_FW": {
+          "@cds.ambiguous": "missing on condition?",
+          "type": "cds.Association",
+          "target": "RMTSAMPLEFLIGHT.FlightCollection",
+          "cardinality": {
+            "max": "*"
+          },
+          "keys": []
+        }
+      }
+    },
+    "RMTSAMPLEFLIGHT.TravelagencyCollection": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.label": "Travel Agencies",
+      "@sap.searchable": "true",
+      "@sap.content.version": "1",
+      "elements": {
+        "agencynum": {
+          "key": true,
+          "type": "cds.String",
+          "length": 8,
+          "@sap.label": "Agency No."
+        },
+        "NAME": {
+          "type": "cds.String",
+          "length": 25,
+          "@sap.label": "Travel agency name"
+        },
+        "STREET": {
+          "type": "cds.String",
+          "length": 30,
+          "@sap.label": "Street"
+        },
+        "POSTBOX": {
+          "type": "cds.String",
+          "length": 10,
+          "@sap.label": "PO Box"
+        },
+        "POSTCODE": {
+          "type": "cds.String",
+          "length": 10,
+          "@sap.label": "Postal Code"
+        },
+        "CITY": {
+          "type": "cds.String",
+          "length": 25,
+          "@sap.label": "City"
+        },
+        "COUNTRY": {
+          "type": "cds.String",
+          "length": 3,
+          "@sap.label": "Country"
+        },
+        "REGION": {
+          "type": "cds.String",
+          "length": 3,
+          "@sap.label": "Region"
+        },
+        "TELEPHONE": {
+          "type": "cds.String",
+          "length": 30,
+          "@sap.label": "Tel."
+        },
+        "URL": {
+          "type": "cds.String",
+          "length": 255,
+          "@sap.label": "Travel agency URL"
+        },
+        "LANGU": {
+          "type": "cds.String",
+          "length": 2,
+          "@sap.label": "Language"
+        },
+        "CURRENCY": {
+          "type": "cds.String",
+          "length": 5,
+          "@sap.label": "Trav.Agency.Curr",
+          "@sap.semantics": "currency-code"
+        },
+        "mimeType": {
+          "type": "cds.String",
+          "length": 128,
+          "@sap.label": "MIME Type"
+        }
+      },
+      "actions": {
+        "GetAgencyDetails": {
+          "kind": "function",
+          "returns": {
+            "type": "RMTSAMPLEFLIGHT.TravelagencyCollection"
+          }
+        }
+      }
+    },
+    "RMTSAMPLEFLIGHT.TravelAgencies": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.searchable": "true",
+      "@sap.content.version": "1",
+      "elements": {
+        "agencynum": {
+          "key": true,
+          "type": "cds.String",
+          "length": 8,
+          "@sap.label": "Agency No."
+        },
+        "NAME": {
+          "type": "cds.String",
+          "length": 25,
+          "@sap.label": "Travel agency name"
+        },
+        "STREET": {
+          "type": "cds.String",
+          "length": 30,
+          "@sap.label": "Street"
+        },
+        "POSTBOX": {
+          "type": "cds.String",
+          "length": 10,
+          "@sap.label": "PO Box"
+        },
+        "POSTCODE": {
+          "type": "cds.String",
+          "length": 10,
+          "@sap.label": "Postal Code"
+        },
+        "CITY": {
+          "type": "cds.String",
+          "length": 25,
+          "@sap.label": "City"
+        },
+        "COUNTRY": {
+          "type": "cds.String",
+          "length": 3,
+          "@sap.label": "Country"
+        },
+        "REGION": {
+          "type": "cds.String",
+          "length": 3,
+          "@sap.label": "Region"
+        },
+        "TELEPHONE": {
+          "type": "cds.String",
+          "length": 30,
+          "@sap.label": "Tel."
+        },
+        "URL": {
+          "type": "cds.String",
+          "length": 255,
+          "@sap.label": "Travel agency URL"
+        },
+        "LANGU": {
+          "type": "cds.String",
+          "length": 2,
+          "@sap.label": "Language"
+        },
+        "CURRENCY": {
+          "type": "cds.String",
+          "length": 5,
+          "@sap.label": "Trav.Agency.Curr",
+          "@sap.semantics": "currency-code"
+        },
+        "mimeType": {
+          "type": "cds.String",
+          "length": 128,
+          "@sap.label": "MIME Type"
+        }
+      },
+      "actions": {
+        "GetAgencyDetails": {
+          "kind": "function",
+          "returns": {
+            "type": "RMTSAMPLEFLIGHT.TravelagencyCollection"
+          }
+        }
+      }
+    },
+    "RMTSAMPLEFLIGHT.TravelAgencies_DQ": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.searchable": "true",
+      "@sap.content.version": "1",
+      "elements": {
+        "agencynum": {
+          "key": true,
+          "type": "cds.String",
+          "length": 8,
+          "@sap.label": "Agency No."
+        },
+        "NAME": {
+          "type": "cds.String",
+          "length": 25,
+          "@sap.label": "Travel agency name"
+        },
+        "STREET": {
+          "type": "cds.String",
+          "length": 30,
+          "@sap.label": "Street"
+        },
+        "POSTBOX": {
+          "type": "cds.String",
+          "length": 10,
+          "@sap.label": "PO Box"
+        },
+        "POSTCODE": {
+          "type": "cds.String",
+          "length": 10,
+          "@sap.label": "Postal Code"
+        },
+        "CITY": {
+          "type": "cds.String",
+          "length": 25,
+          "@sap.label": "City"
+        },
+        "COUNTRY": {
+          "type": "cds.String",
+          "length": 3,
+          "@sap.label": "Country"
+        },
+        "REGION": {
+          "type": "cds.String",
+          "length": 3,
+          "@sap.label": "Region"
+        },
+        "TELEPHONE": {
+          "type": "cds.String",
+          "length": 30,
+          "@sap.label": "Tel."
+        },
+        "URL": {
+          "type": "cds.String",
+          "length": 255,
+          "@sap.label": "Travel agency URL"
+        },
+        "LANGU": {
+          "type": "cds.String",
+          "length": 2,
+          "@sap.label": "Language"
+        },
+        "CURRENCY": {
+          "type": "cds.String",
+          "length": 5,
+          "@sap.label": "Trav.Agency.Curr",
+          "@sap.semantics": "currency-code"
+        },
+        "mimeType": {
+          "type": "cds.String",
+          "length": 128,
+          "@sap.label": "MIME Type"
+        }
+      }
+    },
+    "RMTSAMPLEFLIGHT.VL_BOOK_SMOKER_ES": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.content.version": "1",
+      "@sap.value.list": "true",
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.LargeString",
+          "@sap.value.list": "standard"
+        },
+        "NAME": {
+          "type": "cds.LargeString"
+        }
+      }
+    },
+    "RMTSAMPLEFLIGHT.VL_VL_BOOK_SMOKER_ID_ES": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.content.version": "1",
+      "@sap.value.list": "true",
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.LargeString"
+        },
+        "NAME": {
+          "type": "cds.LargeString"
+        }
+      }
+    },
+    "RMTSAMPLEFLIGHT.VL_MY_CURR_ES": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.content.version": "1",
+      "@sap.value.list": "true",
+      "elements": {
+        "CURR_ID": {
+          "key": true,
+          "type": "cds.LargeString"
+        },
+        "CURR_NAME": {
+          "type": "cds.LargeString"
+        },
+        "NavProp1": {
+          "@cds.ambiguous": "missing on condition?",
+          "type": "cds.Association",
+          "target": "RMTSAMPLEFLIGHT.BookingCollection",
+          "keys": []
+        }
+      }
+    },
+    "RMTSAMPLEFLIGHT.VL_BOOK_ADDRESS_COUNTRY_DEEP_ES": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.content.version": "1",
+      "@sap.value.list": "true",
+      "elements": {
+        "CountryID": {
+          "key": true,
+          "type": "cds.LargeString"
+        },
+        "Country": {
+          "type": "cds.LargeString"
+        }
+      }
+    },
+    "RMTSAMPLEFLIGHT.VL_CT_FLIGHT_DETAILS_AIRPORT_TO_ES": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.content.version": "1",
+      "@sap.value.list": "true",
+      "elements": {
+        "AirportID": {
+          "key": true,
+          "type": "cds.LargeString"
+        },
+        "AirportName": {
+          "type": "cds.LargeString"
+        }
+      }
+    },
+    "RMTSAMPLEFLIGHT.VL_ACTION_PARAMETER_AIRLINE_ID_ES": {
+      "kind": "entity",
+      "@cds.persistence.skip": true,
+      "@sap.content.version": "1",
+      "@sap.value.list": "true",
+      "elements": {
+        "AirlineID": {
+          "key": true,
+          "type": "cds.LargeString"
+        },
+        "AirlineName": {
+          "type": "cds.LargeString"
+        }
+      }
+    }
+  }
+}
